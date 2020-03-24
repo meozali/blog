@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Model\Reply;
+use App\Model\Question;
 use Illuminate\Http\Request;
+use App\Http\Resources\ReplyResource;
+use Illuminate\Http\Response;
 
 class ReplyController extends Controller
 {
@@ -12,9 +15,12 @@ class ReplyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Question $questions)
     {
-        //
+      // print_r($questions);
+       return ReplyResource::collection($questions->replies);
+        // return Reply::latest()->get();
+
     }
 
     /**
@@ -44,9 +50,11 @@ class ReplyController extends Controller
      * @param  \App\Model\Reply  $reply
      * @return \Illuminate\Http\Response
      */
-    public function show(Reply $reply)
+    public function show(Question $questions ,Reply $reply)
     {
         //
+
+        return new ReplyResource($reply);
     }
 
     /**
@@ -67,9 +75,13 @@ class ReplyController extends Controller
      * @param  \App\Model\Reply  $reply
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Reply $reply)
+    public function update(Question $questions,Request $request, Reply $reply)
     {
         //
+        $reply->update($request->all());
+        return response('updated',Response::HTTP_ACCEPTED);
+
+
     }
 
     /**
